@@ -7,13 +7,15 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class SceneHandler : MonoBehaviour
 {
     public GameObject inventoryCanvas;
-    public ToggleUI toggle;
+    public ToggleUI toggle; // script holding inventory and items
     public GameObject playerHandler; // playerhandler per scene
     public GameObject playerPrefab;
     private GameObject playerObject;
     public GameObject playerInvUI;
     private int invSocketAmt = 9;
     public List<GameObject> publicItems; // items added in editor to save between scenes
+    public bool home; // if scene is museum
+    public bool alarmTriggered;
 
     public void TravelScene(string sceneName) // move across scenes normally
     {
@@ -41,14 +43,16 @@ public class SceneHandler : MonoBehaviour
     {
         try
         {
-            SceneManager.LoadScene(sceneName);
-            if (!playerObject)
+            foreach (GameObject i2s in publicItems)
             {
-                playerObject = Instantiate<GameObject>(playerPrefab);
+                if (i2s)
+                    DontDestroyOnLoad(i2s);
+                Debug.Log(i2s ? i2s.name : "none1");
             }
-            Debug.LogFormat("Scene {0} successfully loaded", sceneName);
+            SceneManager.LoadScene(sceneName);
+            Debug.LogFormat("Scene {0} successfully loaded with {1} attached", sceneName, publicItems);
         }
-        catch(System.Exception e)
+        catch (System.Exception e)
         {
             Debug.LogErrorFormat("Error loading scene {0}\n\r {1}", sceneName, e);
         }
