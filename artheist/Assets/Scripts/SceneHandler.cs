@@ -7,7 +7,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class SceneHandler : MonoBehaviour
 {
     public GameObject inventoryCanvas;
-    public ToggleInventory toggle;
+    public ToggleUI toggle;
     public GameObject playerHandler; // playerhandler per scene
     public GameObject playerPrefab;
     private GameObject playerObject;
