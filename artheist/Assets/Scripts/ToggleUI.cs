@@ -4,29 +4,34 @@ using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.InputSystem;
 
-public class ToggleInventory : MonoBehaviour
+public class ToggleUI : MonoBehaviour
 {
-    public InputActionReference leftPrimary = null, rightPrimary = null;
+    public InputActionReference leftPrimary = null, rightPrimary = null, leftPauseButton = null, rightPauseButton = null;
     public GameObject inventoryCanvas;
     public XRSocketInteractor[] sockets;
     public GameObject[] contained;
+    public GameObject pauseCanvas, settingsPanel;
 
     private void Awake()
     {
         contained = new GameObject[10];
         Debug.Log("awake");
-        leftPrimary.action.performed += Toggle;
-        rightPrimary.action.performed += Toggle;
+        leftPrimary.action.performed += ToggleInv;
+        rightPrimary.action.performed += ToggleInv;
+        leftPauseButton.action.performed += TogglePause;
+        rightPauseButton.action.performed += TogglePause;
     }
 
     private void OnDestroy()
     {
         Debug.Log("ondestroy");
-        leftPrimary.action.performed -= Toggle;
-        rightPrimary.action.performed -= Toggle;
+        leftPrimary.action.performed -= ToggleInv;
+        rightPrimary.action.performed -= ToggleInv;
+        rightPauseButton.action.performed -= TogglePause;
+        leftPauseButton.action.performed -= TogglePause;
     }
 
-    private void Toggle(InputAction.CallbackContext context)
+    private void ToggleInv(InputAction.CallbackContext context)
     {
         Debug.Log("toggle start");
         if (inventoryCanvas.activeSelf)
@@ -59,6 +64,41 @@ public class ToggleInventory : MonoBehaviour
                     sockets[i].IsSelecting(contained[i].GetComponent<IXRSelectInteractable>());
                 }
             }
+        }
+        return;
+    }
+
+    public void TogglePauseUI()
+    {
+        TogglePause(new InputAction.CallbackContext());
+    }
+
+    public void ToggleSettings()
+    {
+        Debug.Log("toggle start");
+
+        try
+        {
+
+            settingsPanel.SetActive(!settingsPanel.activeSelf);
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogFormat("settings failed: {0}", e);
+        }
+    }
+
+    private void TogglePause(InputAction.CallbackContext context)
+    {
+        Debug.Log("toggle start");
+        try
+        {
+            pauseCanvas.SetActive(!pauseCanvas.activeSelf);
+            // camera.animation enabled = !camera.enabled or whatever
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogFormat("pause failed: {0}", e);
         }
     }
 }
