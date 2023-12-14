@@ -209,3 +209,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b43169e24cfa964982a3b69306af16d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  alarmLight: {fileID: 0}
+  sceneHandler: {fileID: 0}

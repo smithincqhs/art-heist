@@ -31,13 +31,13 @@ public class SettingsPanelHandler : MonoBehaviour
         rayGrab = !rayGrab;
         if (rayGrab)
         {
-            rightRayInteractor.interactionLayers = InteractionLayerMask.GetMask("Default");
-            leftRayInteractor.interactionLayers = InteractionLayerMask.GetMask("Default");
+            rightRayInteractor.raycastMask = InteractionLayerMask.GetMask("Default", "UI");
+            leftRayInteractor.raycastMask = InteractionLayerMask.GetMask("Default", "UI");
         }
         else
         {
-        rightRayInteractor.interactionLayers = InteractionLayerMask.GetMask("Nothing");
-        leftRayInteractor.interactionLayers = InteractionLayerMask.GetMask("Nothing");
+        rightRayInteractor.raycastMask = InteractionLayerMask.GetMask("UI");
+        leftRayInteractor.raycastMask = InteractionLayerMask.GetMask("UI");
         }
     }
 
