@@ -16,6 +16,8 @@ public class SceneHandler : MonoBehaviour
     public List<GameObject> publicItems; // items added in editor to save between scenes
     public bool home = false;
     public bool alarmTriggered = false;
+    [SerializeField]
+    private List<GameObject> invItems;
 
     public void TravelScene(string sceneName) // move across scenes normally
     {
@@ -27,11 +29,15 @@ public class SceneHandler : MonoBehaviour
             foreach (GameObject i2s in saveItems)
             {
                 if (i2s)
+                {
                     DontDestroyOnLoad(i2s);
+                    AddToInv(i2s);
+                }
                 Debug.Log(i2s ? i2s.name : "none1");
             }
             SceneManager.LoadScene(sceneName);
             Debug.LogFormat("Scene {0} successfully loaded with {1} attached", sceneName, saveItems);
+            EnsureObjectSocketConnection();
         }
         catch (System.Exception e)
         {
@@ -68,6 +74,7 @@ public class SceneHandler : MonoBehaviour
                 socketObjects[i] = invSockets[i].hasSelection ? invSockets[i].firstInteractableSelected.transform.gameObject : null;
                 Debug.Log(socketObjects[i] ? socketObjects[i].name : "none");
             }
+            invItems = new List<GameObject>(socketObjects);
             return new List<GameObject>(socketObjects);
         }
         else
@@ -75,6 +82,41 @@ public class SceneHandler : MonoBehaviour
             return new List<GameObject>(toggle.contained);
         }
 
+    }
+
+    public void AddToInv(GameObject objecttoadd)
+    {
+        invItems.Add(objecttoadd);
+    }
+
+    public void TakeFromInv(GameObject objecttosub)
+    {
+        invItems.Remove(objecttosub);
+    }
+
+    private void EnsureObjectSocketConnection()
+    {
+        GameObject panelOBJ = playerInvUI.transform.Find("Panel").gameObject;
+        XRSocketInteractor[] invSockets = panelOBJ.GetComponentsInChildren<XRSocketInteractor>();
+        foreach(GameObject i2s in invItems)
+        {
+            if (i2s)
+            {
+                foreach (XRSocketInteractor sock in invSockets)
+                {
+                    if (!sock.startingSelectedInteractable)
+                    {
+                        sock.startingSelectedInteractable = i2s.GetComponent<XRBaseInteractable>();
+
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                invItems.Remove(i2s);
+            }
+        }
     }
 
 }
