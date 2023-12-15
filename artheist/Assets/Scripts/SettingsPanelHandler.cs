@@ -29,16 +29,8 @@ public class SettingsPanelHandler : MonoBehaviour
     public void ToggleGrabMode()
     {
         rayGrab = !rayGrab;
-        if (rayGrab)
-        {
-            rightRayInteractor.interactionLayers = InteractionLayerMask.GetMask("Default");
-            leftRayInteractor.interactionLayers = InteractionLayerMask.GetMask("Default");
-        }
-        else
-        {
-        rightRayInteractor.interactionLayers = InteractionLayerMask.GetMask("Nothing");
-        leftRayInteractor.interactionLayers = InteractionLayerMask.GetMask("Nothing");
-        }
+        rightRayInteractor.useForceGrab = rayGrab;
+        leftRayInteractor.useForceGrab = rayGrab;
     }
 
 
